@@ -7,7 +7,7 @@ const urlsToCache = [
   '/ui.js',
   '/data.js',
   '/manifest.json',
-  '/favicon.png'
+  '/apple-touch-icon.png' // Cache the correct PNG icon
   // Add other assets like fonts or images if needed later
 ];
 
