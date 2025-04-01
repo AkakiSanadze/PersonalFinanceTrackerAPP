@@ -59,8 +59,9 @@ const UIController = (function() {
         descriptionPieChartCanvas: '#description-pie-chart', // New
         // Budget
         budgetSection: '#budget',
-        budgetSetup: '#budget-setup',
-        budgetStatus: '#budget-status',
+        budgetCategoryList: '#budget-category-list', // For setting budgets
+        saveBudgetsBtn: '#save-budgets-btn',
+        budgetStatusList: '#budget-status-list', // For displaying status
         // Settings
         settingsSection: '#settings',
         categoryListSettings: '#category-list-settings',
@@ -201,7 +202,7 @@ const UIController = (function() {
             listContainer.innerHTML = ''; // Clear existing list
 
             // Show bulk actions only if there are expenses
-            UIController.showBulkActions(expenses.length > 0);
+            UIController.showBulkActions(expenses.length > 0); // Use UIController as 'this' might be different
             UIController.setSelectAllCheckboxState(false); // Uncheck select all
             UIController.updateDeleteSelectedButtonState(0); // Disable delete button
 
@@ -692,6 +693,7 @@ const UIController = (function() {
              const checkbox = document.querySelector(DOMstrings.selectAllCheckbox);
              if (checkbox) {
                  checkbox.checked = checked;
+                 checkbox.indeterminate = false; // Reset indeterminate state
              }
         },
 
@@ -701,7 +703,85 @@ const UIController = (function() {
                  button.disabled = selectedCount === 0;
                  button.textContent = selectedCount > 0 ? `Delete Selected (${selectedCount})` : 'Delete Selected';
              }
+        },
+
+        // --- Budget ---
+        displayBudgetSetupList: (categories, budgets) => {
+            const listContainer = document.querySelector(DOMstrings.budgetCategoryList);
+            if (!listContainer) return;
+            listContainer.innerHTML = ''; // Clear list
+
+            categories.forEach(category => {
+                const budgetAmount = budgets[category.id] || ''; // Get existing budget or empty string
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${category.icon || '🏷️'} ${category.name}:</span>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="No budget set"
+                        value="${budgetAmount}"
+                        data-category-id="${category.id}"
+                        class="budget-input"
+                    >
+                `;
+                listContainer.appendChild(li);
+            });
+        },
+
+        getBudgetInputs: () => {
+            const inputs = document.querySelectorAll(`${DOMstrings.budgetCategoryList} .budget-input`);
+            const budgets = {};
+            let isValid = true;
+            inputs.forEach(input => {
+                const categoryId = input.dataset.categoryId;
+                const amount = input.value.trim();
+                if (amount) { // Only save if an amount is entered
+                    const parsedAmount = parseFloat(amount);
+                    if (isNaN(parsedAmount) || parsedAmount < 0) {
+                        alert(`Invalid budget amount entered for category ID ${categoryId}. Please enter a positive number or leave blank.`);
+                        input.focus();
+                        isValid = false;
+                    } else {
+                        budgets[categoryId] = parsedAmount;
+                    }
+                } else {
+                     // If input is empty, consider it as deleting the budget for that category
+                     // We handle the actual deletion/update in the controller based on this object
+                     // Mark for deletion or simply don't include? Let's not include.
+                }
+            });
+            return isValid ? budgets : null;
+        },
+
+        displayBudgetStatus: (budgetStatusData) => {
+            // budgetStatusData = [ { name, icon, spent, budget, percentage, isOverBudget }, ... ]
+            const listContainer = document.querySelector(DOMstrings.budgetStatusList);
+            if (!listContainer) return;
+            listContainer.innerHTML = ''; // Clear list
+
+            if (budgetStatusData.length === 0) {
+                listContainer.innerHTML = '<li>No budgets set or no spending this period.</li>';
+                return;
+            }
+
+            budgetStatusData.forEach(item => {
+                const li = document.createElement('li');
+                const percentage = item.percentage > 100 ? 100 : item.percentage; // Cap progress bar at 100% visually
+                const overBudgetClass = item.isOverBudget ? 'over-budget' : '';
+                li.innerHTML = `
+                    <div class="budget-item-details">
+                        <span>${item.icon || '🏷️'} ${item.name}</span>
+                        <small>Spent: ${formatCurrency(item.spent)} / Budget: ${formatCurrency(item.budget)}</small>
+                    </div>
+                    <progress class="${overBudgetClass}" max="100" value="${percentage.toFixed(1)}"></progress>
+                    <span style="margin-left: 5px; font-size: 0.9em; width: 45px; text-align: right;">${item.percentage.toFixed(1)}%</span>
+                `;
+                listContainer.appendChild(li);
+            });
         }
+
 
     };
 

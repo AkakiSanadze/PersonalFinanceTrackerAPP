@@ -66,4 +66,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Desktop Navigation:** Changed desktop top navigation links to display vertically instead of horizontally via CSS.
 - **Settings Page Layout:** Improved layout and styling of Settings page sections (Add Category, Data Management, Theme). Implemented a custom-styled file input button for data import.
 - **Data Export Filename:** Corrected the suggested filename during data export to include the `.json` extension.
+
+### Added
+- **Budget Planning (Phase 1):**
+    - Implemented UI for setting monthly budget amounts per category on the Budget page.
+    - Added data handling in `data.js` to save/retrieve budgets from localStorage.
+    - Implemented logic in `script.js` to load budget data, save user inputs, and calculate/display budget status (spent vs. budget) for the current month.
+    - Added progress bars to visualize budget consumption.
+- **PWA Configuration:** Added a `manifest.json` file and linked it in `index.html` to enable basic Progressive Web App features, aiming to improve the "Add to Home Screen" behavior (persistent storage, icon display).
 - **Favicon & iOS Home Screen:** Added `favicon.png` as the browser favicon and the icon for iOS "Add to Home Screen" functionality via `<link>` tags in `index.html`. Added related meta tags for iOS web app appearance.

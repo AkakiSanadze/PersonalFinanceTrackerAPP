@@ -564,6 +564,87 @@ body.dark-mode #go-to-full-form-btn:hover {
     background-color: #4a4a4e;
 }
 
+/* Budget Page Styles */
+#budget-category-list li,
+#budget-status-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5ea;
+}
+#budget-category-list li:last-child,
+#budget-status-list li:last-child {
+    border-bottom: none;
+}
+
+#budget-category-list span {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+#budget-category-list input[type="number"] {
+    width: 100px; /* Limit width of budget input */
+    text-align: right;
+}
+
+#budget-status-list .budget-item-details {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+#budget-status-list .budget-item-details small {
+     display: block;
+     color: #6d6d72;
+}
+#budget-status-list progress {
+    width: 100px; /* Adjust width as needed */
+    height: 8px;
+    vertical-align: middle;
+}
+/* Basic progress bar styling */
+#budget-status-list progress::-webkit-progress-bar {
+    background-color: #e5e5ea;
+    border-radius: 4px;
+}
+#budget-status-list progress::-webkit-progress-value {
+    background-color: #007aff; /* Blue progress */
+    border-radius: 4px;
+}
+#budget-status-list progress::-moz-progress-bar { /* Firefox */
+    background-color: #007aff;
+    border-radius: 4px;
+}
+/* Style for over-budget progress */
+#budget-status-list progress.over-budget::-webkit-progress-value {
+    background-color: #ff3b30; /* Red progress */
+}
+#budget-status-list progress.over-budget::-moz-progress-bar { /* Firefox */
+    background-color: #ff3b30;
+}
+
+
+body.dark-mode #budget-category-list li,
+body.dark-mode #budget-status-list li {
+    border-bottom-color: #3a3a3c;
+}
+body.dark-mode #budget-status-list .budget-item-details small {
+     color: #8e8e93;
+}
+body.dark-mode #budget-status-list progress::-webkit-progress-bar {
+    background-color: #3a3a3c;
+}
+body.dark-mode #budget-status-list progress::-webkit-progress-value {
+    background-color: #0a84ff; /* Brighter blue */
+}
+body.dark-mode #budget-status-list progress::-moz-progress-bar { /* Firefox */
+    background-color: #0a84ff;
+}
+body.dark-mode #budget-status-list progress.over-budget::-webkit-progress-value {
+    background-color: #ff453a; /* Brighter red */
+}
+body.dark-mode #budget-status-list progress.over-budget::-moz-progress-bar { /* Firefox */
+    background-color: #ff453a;
+}
+
 /* Settings Page Specific Styles */
 #settings h3 {
     font-size: 1rem;

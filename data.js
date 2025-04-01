@@ -10,7 +10,7 @@ const DataController = (function() {
     const STORAGE_KEYS = {
         expenses: 'financeTrackerExpenses',
         categories: 'financeTrackerCategories',
-        budgets: 'financeTrackerBudgets' // Add later
+        budgets: 'financeTrackerBudgets'
     };
 
     // Helper function to get data from localStorage
@@ -199,18 +199,51 @@ const DataController = (function() {
 
         // --- Budgets (Placeholders) ---
         getBudgets: () => {
-            // return getData(STORAGE_KEYS.budgets);
-            console.warn('Budget functionality not yet implemented.');
-            return [];
+            // Budgets stored as an object: { categoryId: amount, categoryId2: amount2 }
+            return getData(STORAGE_KEYS.budgets) || {}; // Return empty object if null/undefined
         },
-        addBudget: (budgetData) => {
-             console.warn('Budget functionality not yet implemented.');
+
+        // Sets/Updates the budget for a specific category
+        setBudgetForCategory: (categoryId, amount) => {
+             const budgets = DataController.getBudgets(); // Use the public getter
+             const budgetAmount = parseFloat(amount);
+
+             if (isNaN(budgetAmount) || budgetAmount < 0) {
+                 console.warn(`Invalid budget amount provided for category ${categoryId}: ${amount}`);
+                 // Optionally remove budget if amount is invalid/empty? Or just ignore? Ignoring for now.
+                 // delete budgets[categoryId];
+                 return false;
+             }
+
+             budgets[categoryId] = budgetAmount;
+             saveData(STORAGE_KEYS.budgets, budgets);
+             console.log(`Budget set for category ${categoryId}: ${budgetAmount}`);
+             return true;
         },
-        updateBudget: (id, updatedData) => {
-             console.warn('Budget functionality not yet implemented.');
+
+        // Optionally, a function to save multiple budgets at once
+        saveAllBudgets: (budgetsObject) => {
+             // Validate the entire object? For now, assume it's pre-validated.
+             saveData(STORAGE_KEYS.budgets, budgetsObject);
+             console.log('All budgets saved.');
         },
-        deleteBudget: (id) => {
-             console.warn('Budget functionality not yet implemented.');
+
+        // Get budget for a specific category
+        getBudgetForCategory: (categoryId) => {
+            const budgets = DataController.getBudgets();
+            return budgets[categoryId]; // Returns amount or undefined
+        },
+
+        // Remove budget for a category (if needed)
+        deleteBudgetForCategory: (categoryId) => {
+            const budgets = DataController.getBudgets();
+            if (budgets.hasOwnProperty(categoryId)) {
+                delete budgets[categoryId];
+                saveData(STORAGE_KEYS.budgets, budgets);
+                console.log(`Budget deleted for category ${categoryId}`);
+                return true;
+            }
+            return false;
         },
 
         // --- Data Export/Import ---
@@ -218,7 +251,7 @@ const DataController = (function() {
             const data = {
                 expenses: getData(STORAGE_KEYS.expenses),
                 categories: getData(STORAGE_KEYS.categories),
-                budgets: getData(STORAGE_KEYS.budgets) // Include budgets when implemented
+                budgets: DataController.getBudgets() // Use the public getter
             };
             return JSON.stringify(data, null, 2); // Pretty print JSON
         },
@@ -233,7 +266,8 @@ const DataController = (function() {
                     // Maybe merge instead of overwrite? For now, overwrite.
                     saveData(STORAGE_KEYS.categories, data.categories);
                 }
-                 if (data.budgets && Array.isArray(data.budgets)) {
+                 // Import budgets (assuming object format)
+                 if (data.budgets && typeof data.budgets === 'object' && !Array.isArray(data.budgets)) {
                     saveData(STORAGE_KEYS.budgets, data.budgets);
                 }
                 console.log('Data imported successfully.');

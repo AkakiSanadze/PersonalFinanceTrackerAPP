@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="favicon.png"> <!-- Use favicon.png for iOS home screen icon -->
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Optional: Makes it feel more like a native app -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Optional: Status bar style -->
+    <link rel="manifest" href="/manifest.json"> <!-- Link to the manifest -->
 </head>
 <body>
 
@@ -148,10 +149,20 @@
         <section id="budget"> <!-- Hidden initially by CSS -->
             <h2>Budget Planning</h2>
             <div id="budget-setup">
-                <!-- Interface to set budget per category -->
+                 <p>Set your monthly budget limit for each category:</p>
+                 <ul id="budget-category-list" style="margin-top: 15px;">
+                     <!-- Budget items populated by JS -->
+                     <!-- Example: <li><span>🍔 Food:</span> <input type="number" min="0" step="0.01" placeholder="Set budget"></li> -->
+                 </ul>
+                 <button id="save-budgets-btn" style="margin-top: 15px; width: 100%;">Save Budgets</button>
             </div>
-            <div id="budget-status">
-                <!-- Display budget progress and warnings -->
+            <hr>
+            <div id="budget-status" style="margin-top: 15px;">
+                 <h3>Budget Status (Current Month)</h3>
+                 <ul id="budget-status-list">
+                     <!-- Budget status populated by JS -->
+                     <!-- Example: <li>🍔 Food: $50 / $200 (25%) <progress max="100" value="25"></progress></li> -->
+                 </ul>
             </div>
         </section>
 

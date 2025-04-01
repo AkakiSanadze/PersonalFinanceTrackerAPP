@@ -94,6 +94,12 @@ const AppController = (function(dataCtrl, uiCtrl) {
             applyFilterBtn.addEventListener('click', ctrlApplyDateFilter);
         }
 
+        // Budget Page Save Button
+        const saveBudgetsBtn = document.querySelector(DOM.saveBudgetsBtn);
+        if (saveBudgetsBtn) {
+            saveBudgetsBtn.addEventListener('click', ctrlSaveBudgets);
+        }
+
 
          console.log('Event listeners setup complete.');
     };
@@ -117,8 +123,9 @@ const AppController = (function(dataCtrl, uiCtrl) {
              loadDashboardData();
          } else if (targetId === 'analytics') {
               loadAnalyticsData(); // Load default analytics view (latest month)
+         } else if (targetId === 'budget') {
+              loadBudgetPageData(); // Load budget setup and status
          }
-         // Add similar checks for budget when implemented
          uiCtrl.showSection(targetId);
          updateBottomNavActiveState(targetId); // Update active state for bottom nav
     }
@@ -435,6 +442,47 @@ const AppController = (function(dataCtrl, uiCtrl) {
         }
     }
 
+    // --- Budget Control ---
+    function ctrlSaveBudgets() {
+        console.log('Save budgets button clicked.');
+        const budgetInputs = uiCtrl.getBudgetInputs();
+        if (budgetInputs === null) {
+            // Validation failed in UI controller
+            return;
+        }
+
+        // Get existing budgets to handle deletions
+        const existingBudgets = dataCtrl.getBudgets();
+        const categories = dataCtrl.getCategories();
+        let changesMade = false;
+
+        categories.forEach(category => {
+            const categoryId = category.id;
+            const newAmount = budgetInputs[categoryId]; // Will be number or undefined
+
+            if (newAmount !== undefined) {
+                // Add or Update budget
+                if (dataCtrl.setBudgetForCategory(categoryId, newAmount)) {
+                    changesMade = true;
+                }
+            } else if (existingBudgets.hasOwnProperty(categoryId)) {
+                // Delete budget if input was empty and budget existed
+                if (dataCtrl.deleteBudgetForCategory(categoryId)) {
+                    changesMade = true;
+                }
+            }
+        });
+
+
+        if (changesMade) {
+            uiCtrl.displayMessage('Budgets saved successfully!', 'success');
+            loadBudgetPageData(); // Refresh budget status display
+        } else {
+            uiCtrl.displayMessage('No changes detected in budgets.', 'info');
+        }
+    }
+
+
     // --- Data Loading and UI Refresh Functions ---
 
     // Helper function to find the latest month (YYYY-MM) with expenses
@@ -685,6 +733,60 @@ const AppController = (function(dataCtrl, uiCtrl) {
 
     }
 
+    // --- Load Budget Page Data ---
+    function loadBudgetPageData() {
+        console.log('Loading budget page data...');
+        const categories = dataCtrl.getCategories();
+        const budgets = dataCtrl.getBudgets();
+        const allExpenses = dataCtrl.getExpenses();
+
+        // Display the budget setting list
+        uiCtrl.displayBudgetSetupList(categories, budgets);
+
+        // Calculate budget status for the current month
+        const targetMonthYear = getMostRecentMonthWithData(allExpenses); // Use same logic as dashboard
+        const [targetYear, targetMonth] = targetMonthYear.split('-');
+        const startOfMonth = `${targetYear}-${targetMonth}-01`;
+        const endOfMonthDate = new Date(parseInt(targetYear), parseInt(targetMonth), 0);
+        const endOfMonth = `${targetYear}-${targetMonth}-${endOfMonthDate.getDate().toString().padStart(2, '0')}`;
+        const startDate = new Date(startOfMonth + 'T00:00:00');
+        const endDate = new Date(endOfMonth + 'T23:59:59');
+
+        const expensesCurrentMonth = allExpenses.filter(exp => {
+             if (!exp.date || typeof exp.date !== 'string' || !exp.date.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
+             const expenseDate = new Date(exp.date + 'T00:00:00');
+             if (isNaN(expenseDate.getTime())) return false;
+             return expenseDate >= startDate && expenseDate <= endDate;
+        });
+
+        // Calculate spending per category for the month
+        const spendingByCategory = expensesCurrentMonth.reduce((acc, exp) => {
+            acc[exp.categoryId] = (acc[exp.categoryId] || 0) + exp.amount;
+            return acc;
+        }, {});
+
+        // Prepare data for budget status display
+        const budgetStatusData = categories
+            .filter(cat => budgets[cat.id] !== undefined && budgets[cat.id] > 0) // Only show categories with a set budget > 0
+            .map(cat => {
+                const budgetAmount = budgets[cat.id];
+                const spentAmount = spendingByCategory[cat.id] || 0;
+                const percentage = budgetAmount > 0 ? (spentAmount / budgetAmount) * 100 : 0;
+                return {
+                    name: cat.name,
+                    icon: cat.icon,
+                    spent: spentAmount,
+                    budget: budgetAmount,
+                    percentage: percentage,
+                    isOverBudget: spentAmount > budgetAmount
+                };
+            })
+            .sort((a, b) => (b.spent / b.budget) - (a.spent / a.budget)); // Sort by percentage used (desc)
+
+        uiCtrl.displayBudgetStatus(budgetStatusData);
+    }
+
+
     // Function to refresh all relevant views after major data changes (like import)
     function updateAllViews() {
         updateCategoryDropdowns();
@@ -692,6 +794,7 @@ const AppController = (function(dataCtrl, uiCtrl) {
         loadExpenses();
         loadDashboardData();
         loadAnalyticsData(); // Load analytics data as well
+        loadBudgetPageData(); // Load budget data as well
         // Load budget data when implemented
         uiCtrl.showSection('dashboard'); // Go to a default view
         updateBottomNavActiveState('dashboard'); // Ensure nav state is correct
