@@ -8,6 +8,12 @@
   "theme_color": "#007aff",
   "scope": "/",
   "icons": [
+     {
+      "src": "/favicon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/favicon.png",
       "sizes": "192x192",

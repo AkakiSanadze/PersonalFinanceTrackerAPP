@@ -73,5 +73,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Added data handling in `data.js` to save/retrieve budgets from localStorage.
     - Implemented logic in `script.js` to load budget data, save user inputs, and calculate/display budget status (spent vs. budget) for the current month.
     - Added progress bars to visualize budget consumption.
-- **PWA Configuration:** Added a `manifest.json` file and linked it in `index.html` to enable basic Progressive Web App features, aiming to improve the "Add to Home Screen" behavior (persistent storage, icon display).
-- **Favicon & iOS Home Screen:** Added `favicon.png` as the browser favicon and the icon for iOS "Add to Home Screen" functionality via `<link>` tags in `index.html`. Added related meta tags for iOS web app appearance.
+- **PWA Configuration:** Added a `manifest.json` file and linked it in `index.html`. Added a basic caching service worker (`sw.js`) and registration logic in `script.js`. Standardized icon paths in `index.html` and `manifest.json` to be absolute (`/`). These changes aim to improve the "Add to Home Screen" behavior (persistent storage, icon display) on iOS and enable basic offline functionality.
+- **Favicon & iOS Home Screen:** Added `favicon.png` as the browser favicon and the icon for iOS "Add to Home Screen" functionality via `<link>` tags (including a specific `180x180` size) in `index.html`. Added related meta tags for iOS web app appearance.
