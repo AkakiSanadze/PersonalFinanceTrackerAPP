@@ -1,0 +1,664 @@
+/* ==================================== */
+/* Reset & Base Styles (Mobile First) */
+/* ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    font-size: 16px; /* Base font size */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.5;
+    background-color: #f0f0f7; /* Light grey background, similar to iOS settings */
+    color: #1c1c1e; /* Standard dark text */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Space for potential bottom nav */
+}
+
+/* ==================================== */
+/* Header / Top Navigation Bar        */
+/* ==================================== */
+header {
+    background-color: #f8f8f8; /* iOS-like light header */
+    padding: 10px 15px;
+    text-align: center;
+    border-bottom: 1px solid #d1d1d6; /* Subtle separator */
+    position: sticky; /* Keep header visible */
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
+/* Hide default nav for mobile, consider bottom nav later */
+header nav {
+    display: none; /* Hide top nav on mobile by default */
+    /* We might implement a bottom nav bar instead */
+}
+
+/* Basic Bottom Nav Placeholder (Requires HTML change for proper implementation) */
+/* This is just conceptual styling for now */
+.bottom-nav {
+    display: flex; /* Show on mobile */
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #d1d1d6;
+    z-index: 100;
+}
+
+.bottom-nav a {
+    color: #8e8e93; /* Inactive color */
+    text-decoration: none;
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 5px;
+    flex-grow: 1;
+}
+
+.bottom-nav a.active { /* Add 'active' class via JS */
+    color: #007aff; /* iOS blue */
+}
+
+/* ==================================== */
+/* Main Content & Sections            */
+/* ==================================== */
+main {
+    flex-grow: 1;
+    padding: 15px;
+}
+
+section {
+    background-color: #fff; /* White cards */
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e5ea; /* Subtle border */
+}
+
+section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5ea; /* Separator inside card */
+}
+
+/* Hide all sections by default, JS will show the active one */
+main > section {
+    display: none;
+}
+main > section.active { /* Add 'active' class via JS */
+    display: block;
+}
+
+
+/* ==================================== */
+/* Forms & Inputs                     */
+/* ==================================== */
+form div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 0.9rem;
+    color: #6d6d72; /* Slightly muted label color */
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="color"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #c8c7cc; /* iOS input border */
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #1c1c1e;
+    appearance: none; /* Remove default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="date"] {
+    /* Try to make date input look less browser-default */
+    min-height: 40px; /* Ensure consistent height */
+}
+
+select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 10px auto;
+    padding-right: 30px; /* Space for arrow */
+}
+
+textarea {
+    min-height: 80px;
+}
+
+/* ==================================== */
+/* Buttons                            */
+/* ==================================== */
+button {
+    display: inline-block;
+    width: auto; /* Allow buttons to size to content */
+    padding: 10px 20px;
+    background-color: #007aff; /* iOS blue */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+button:hover, button:focus {
+    background-color: #005ecb; /* Darker blue on hover */
+    outline: none;
+}
+
+button:active {
+     background-color: #004aaa;
+}
+
+/* Specific button types */
+button[type="submit"] {
+    /* Default style is fine */
+}
+
+/* Secondary/Cancel buttons */
+button.secondary,
+#cancel-add-btn,
+#cancel-edit-btn {
+    background-color: #e5e5ea; /* Light grey */
+    color: #007aff; /* Blue text */
+}
+button.secondary:hover, button.secondary:focus,
+#cancel-add-btn:hover, #cancel-add-btn:focus,
+#cancel-edit-btn:hover, #cancel-edit-btn:focus {
+    background-color: #dcdce0;
+}
+
+/* Destructive action buttons */
+button.destructive,
+.delete-expense-btn,
+.delete-category-btn {
+    background-color: #ff3b30; /* iOS red */
+    color: white;
+}
+button.destructive:hover, button.destructive:focus,
+.delete-expense-btn:hover, .delete-expense-btn:focus,
+.delete-category-btn:hover, .delete-category-btn:focus {
+    background-color: #d9352d;
+}
+
+/* Button groups */
+form button {
+    margin-right: 8px;
+}
+form button:last-child {
+    margin-right: 0;
+}
+
+/* Inline buttons (like manage categories) */
+#manage-categories-btn {
+    background: none;
+    border: none;
+    color: #007aff;
+    padding: 0 5px;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+/* ==================================== */
+/* Lists (Expenses, Categories)       */
+/* ==================================== */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+#expense-items li,
+#category-list-settings li {
+    display: flex;
+    /* justify-content: space-between; Removed to allow flex-grow */
+    align-items: center; /* Vertically align items */
+    padding: 12px 0; /* Padding top/bottom only */
+    border-bottom: 1px solid #e5e5ea;
+    min-height: 50px;
+    gap: 10px; /* Add gap between flex items */
+}
+#expense-items li:last-child,
+#category-list-settings li:last-child {
+    border-bottom: none;
+}
+
+#expense-items li > input[type="checkbox"] {
+    /* Style for the individual expense checkbox */
+    flex-shrink: 0; /* Prevent checkbox from shrinking */
+    margin: 0; /* Remove default margin if any */
+}
+
+#expense-items li > div:nth-of-type(1), /* Target the div containing description/category/date */
+#category-list-settings li > span:first-of-type {
+    /* Middle content */
+    flex-grow: 1; /* Allow this to take up available space */
+    /* margin-right: 10px; Removed, using gap now */
+    overflow: hidden; /* Prevent long text from breaking layout */
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+}
+#expense-items li > div.expense-item-actions, /* Target the specific div */
+#category-list-settings li > div:last-child {
+    /* Right side content (amount/buttons) */
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Add gap between amount and buttons */
+}
+/* Ensure buttons don't wrap unnecessarily */
+#expense-items li > div.expense-item-actions > button,
+#category-list-settings li > div:last-child > button {
+    white-space: nowrap;
+}
+
+#expense-items li strong {
+    display: block; /* Ensure description is on its own line */
+    font-weight: 500;
+}
+#expense-items li small {
+    font-size: 0.85rem;
+    color: #6d6d72;
+}
+#expense-items li .edit-expense-btn,
+#expense-items li .delete-expense-btn,
+#category-list-settings li .edit-category-btn,
+#category-list-settings li .delete-category-btn {
+    padding: 4px 8px; /* Smaller buttons for lists */
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
+/* ==================================== */
+/* Modal                              */
+/* ==================================== */
+#edit-expense-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 15px;
+}
+
+#edit-expense-modal form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px; /* Limit width on larger screens */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+#edit-expense-modal h2 {
+     font-size: 1.1rem;
+     text-align: center;
+     border-bottom: none; /* Remove border from modal title */
+     margin-bottom: 20px;
+}
+
+/* ==================================== */
+/* Analytics / Charts                 */
+/* ==================================== */
+#charts canvas {
+    max-width: 100%;
+    margin-top: 15px;
+}
+
+/* ==================================== */
+/* Footer                             */
+/* ==================================== */
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 0.8rem;
+    color: #8e8e93;
+    margin-top: auto; /* Push footer down */
+}
+
+/* ==================================== */
+/* Responsive Design (Larger Screens) */
+/* ==================================== */
+@media (min-width: 768px) {
+    body {
+        padding-bottom: 0; /* No bottom nav space needed */
+        flex-direction: row; /* Side-by-side layout potential */
+    }
+
+    /* Show top nav, hide bottom nav placeholder */
+    header nav {
+        display: block; /* Show top nav */
+        text-align: center;
+        margin-top: 10px;
+    }
+    .bottom-nav {
+        display: none; /* Hide bottom nav */
+    }
+
+    header nav ul {
+        padding: 0;
+    }
+    header nav li {
+        display: block; /* Change to block for vertical layout */
+        margin: 5px 0; /* Adjust margin for vertical spacing */
+    }
+    header nav a {
+        color: #007aff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+     header nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* Adjust main layout */
+    main {
+        padding: 30px;
+        width: 100%; /* Take full width if header is top */
+        /* Or limit width and center:
+        max-width: 900px;
+        margin: 30px auto; */
+    }
+
+    section {
+        padding: 25px;
+    }
+
+    section h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Form layout adjustments */
+    form {
+        /* Could use grid or flexbox for multi-column layouts */
+    }
+}
+
+/* Helper class */
+.hidden {
+    display: none !important;
+}
+
+/* ==================================== */
+/* Dark Mode Styles                   */
+/* ==================================== */
+body.dark-mode {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+}
+
+body.dark-mode header {
+    background-color: #1c1c1e; /* Dark grey header */
+    border-bottom-color: #3a3a3c; /* Darker separator */
+}
+
+body.dark-mode header h1 {
+    color: #fff;
+}
+
+body.dark-mode .bottom-nav { /* If bottom nav is implemented */
+     background-color: #1c1c1e;
+     border-top-color: #3a3a3c;
+}
+body.dark-mode .bottom-nav a {
+    color: #8e8e93; /* Keep inactive color */
+}
+body.dark-mode .bottom-nav a.active {
+    color: #0a84ff; /* Slightly brighter blue for dark mode */
+}
+
+body.dark-mode main {
+    /* No background change needed if sections have their own */
+}
+
+body.dark-mode section {
+    background-color: #1c1c1e; /* Dark grey cards */
+    border-color: #3a3a3c; /* Darker border */
+    box-shadow: none; /* Remove shadow in dark mode? Optional */
+}
+
+body.dark-mode section h2 {
+    color: #fff;
+    border-bottom-color: #3a3a3c;
+}
+
+body.dark-mode label {
+    color: #8e8e93; /* Lighter grey label */
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="date"],
+body.dark-mode input[type="color"],
+body.dark-mode input[type="file"],
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #2c2c2e; /* Darker input background */
+    border-color: #545458;
+    color: #fff;
+}
+body.dark-mode select {
+     /* Consider a different arrow color for dark mode if needed */
+     /* background-image: url('data:image/svg+xml;...'); */
+}
+
+/* Keep button colors the same, or adjust if needed */
+/* body.dark-mode button { ... } */
+body.dark-mode button.secondary {
+    background-color: #3a3a3c; /* Darker grey secondary button */
+    color: #0a84ff;
+}
+body.dark-mode button.secondary:hover, body.dark-mode button.secondary:focus {
+    background-color: #4a4a4e;
+}
+
+body.dark-mode #expense-items li,
+body.dark-mode #category-list-settings li {
+    border-bottom-color: #3a3a3c;
+}
+
+body.dark-mode #expense-items li small {
+    color: #8e8e93;
+}
+
+body.dark-mode #edit-expense-modal form {
+     background: #1c1c1e;
+}
+body.dark-mode #edit-expense-modal h2 {
+    color: #fff;
+}
+
+
+body.dark-mode footer {
+    color: #8e8e93;
+}
+
+/* Adjust chart colors for dark mode if needed via Chart.js options */
+
+/* ==================================== */
+/* Quick Add Form Styles              */
+/* ==================================== */
+#quick-add-form h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Use existing form div/label/input styles */
+#quick-add-form div {
+    margin-bottom: 10px; /* Slightly less margin for quick form */
+}
+
+#quick-add-form button[type="submit"] {
+    width: 100%; /* Make button full width */
+    margin-top: 10px;
+}
+
+/* Style for the button linking to the full form */
+#go-to-full-form-btn {
+    display: block; /* Make it full width */
+    width: 100%;
+    margin-top: 15px;
+    background-color: #e5e5ea; /* Secondary style */
+    color: #007aff;
+}
+#go-to-full-form-btn:hover {
+     background-color: #dcdce0;
+}
+
+/* Dark mode adjustments for quick add form */
+body.dark-mode #quick-add-form h3 {
+    color: #fff;
+}
+/* Inherits other dark mode input/label styles */
+body.dark-mode #go-to-full-form-btn {
+    background-color: #3a3a3c;
+    color: #0a84ff;
+}
+body.dark-mode #go-to-full-form-btn:hover {
+    background-color: #4a4a4e;
+}
+
+/* Settings Page Specific Styles */
+#settings h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+body.dark-mode #settings h3 {
+    color: #fff;
+}
+
+#settings hr {
+    border: none;
+    border-top: 1px solid #e5e5ea;
+    margin: 20px 0;
+}
+body.dark-mode #settings hr {
+     border-top-color: #3a3a3c;
+}
+
+/* Custom File Input */
+.file-input-wrapper .file-choose-btn {
+    padding: 8px 15px; /* Match button style */
+    cursor: pointer;
+    display: inline-block; /* Allow button sizing */
+    width: auto;
+}
+/* Hide actual file input */
+.file-input-wrapper input[type="file"] {
+    display: none;
+}
+/* Style for the displayed filename */
+#import-filename {
+    font-style: italic;
+}
+body.dark-mode #import-filename {
+     color: #8e8e93;
+}
+
+/* Add Category Form Layout */
+.add-category-form label {
+    /* Styles already defined */
+}
+.add-category-form input[type="text"] {
+    /* Styles already defined */
+}
+.add-category-form input[type="color"] {
+    /* Basic styling for color input */
+    min-width: 40px; /* Ensure it's clickable */
+}
+.add-category-form button {
+    /* Styles already defined */
+    padding: 8px 15px; /* Match input height */
+}
+
+/* Analytics Filter Styles */
+#analytics-filters {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5ea;
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center items horizontally */
+    align-items: flex-end; /* Align items to bottom */
+    gap: 15px; /* Keep gap */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+body.dark-mode #analytics-filters {
+    border-bottom-color: #3a3a3c;
+}
+#analytics-filters label {
+    font-size: 0.85rem;
+}
+#analytics-filters input[type="date"] {
+    padding: 8px 10px; /* Slightly smaller date inputs */
+}
+#analytics-filters button {
+    padding: 8px 15px; /* Match input height */
+}
+
+/* Chart Titles */
+#charts h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+body.dark-mode #charts h4 {
+    color: #fff;
+}
+
+/* Bulk Actions Styling */
+#bulk-actions label {
+    vertical-align: middle;
+}
+#bulk-actions input[type="checkbox"] {
+    vertical-align: middle;
+    width: auto; /* Override default form width */
+    margin-right: 5px;
+}
